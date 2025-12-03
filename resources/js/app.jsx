@@ -3,27 +3,40 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Aurora from '@/components/Aurora';
 import SpotlightCard from '@/components/SpotlightCard';
+import axios from "./axios";
+
+
 
 function App() {
-    // STATE INITIALIZATION
-    const [formData, setFormData] = useState({ 
-        name: '',
-        email: '',
-        message: ''
+
+const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios.post("https://myprofile.test/contact", formData)
+        .then((res) => {
+            console.log("Success:", res.data);
+        })
+        .catch((err) => {
+            console.log("Error:", err);
+        });
+};
+
+
+
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: "",
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form Submitted:', formData);
-        // Add form submission logic here
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
 
     const handleSmoothScroll = (targetId) => {
@@ -65,7 +78,6 @@ function App() {
                     <img src="/images/me.png" className='-mt-40 ml-30 scale-90'/>
                 </div>
             </div>
-            
             <section className="cards pt-[90px] pb-40" id='contact-section'> 
                 <div className="max-w-7xl mx-auto flex items-stretch gap-10"> 
                     
@@ -137,7 +149,7 @@ function App() {
                   <div className="text-left">
                       <p className='text-[16px]'>Made with love using</p>
                       <div className='flex space-x-6 mt-4 mb-4'>
-                          <a href="https://laravel.com" target="_blank"><img src="/images/laravel.png" className='w-10'/></a>
+                          <a href="https://laravel.com" target="_blank"><img src="/images/laravel-b.png" className='w-10'/></a>
                           <a href="https://react.dev/" target="_blank"><img src="/images/react.png" className='w-10'  /></a>
                           <a href="https://tailwindcss.com" target="_blank"><img src="/images/tailwind.png" className='w-10' /></a>
                       </div>
@@ -148,7 +160,7 @@ function App() {
                       <div className='flex space-x-6 mt-4 mb-4'>
                           <a href="https://www.instagram.com/radd25_/" target="_blank"><img src="/images/instagram.png" className='w-10'/></a>
                           <a href="https://twitter.com/capsradd" target="_blank"><img src="/images/twitter.png" className='w-10' alt="" /></a>
-                          <a href="https://github.com/radd-25" target="_blank"><img src="/images/github.png" className='w-10' alt="" /></a>
+                          <a href="https://github.com/radd-25" target="_blank"><img src="/images/github-b.png" className='w-10' alt="" /></a>
                           <a href="https://www.linkedin.com/in/raddin-pratama-rachmat-193143229/" target="_blank"><img src="/images/linkedin.png" className='w-10' alt="" /></a>
                       </div>
                       <p>instagram, twitter, github, linkedin</p>
