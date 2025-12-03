@@ -14,7 +14,7 @@ const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('con
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post("https://myprofile.test/api/contact", formData)
+    axios.post("https://myprofile.test/contact", formData)
         .then((res) => {
             console.log("Success:", res.data);
         })

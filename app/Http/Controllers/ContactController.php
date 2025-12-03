@@ -22,6 +22,10 @@ class ContactController extends Controller
             "data" => $data
         ]);
     }
+
+    public function delete($id)
+    {
+        DB::table('contacts')->where('id', $id)->delete();
+        return redirect('/admin')->with('success', 'Contact deleted successfully.');
+    }
 }
-
-
