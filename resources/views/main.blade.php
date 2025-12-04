@@ -8,7 +8,7 @@
     <title>Benine/Profile Raddin</title>
     <style> body { background-color: #020618; }</style>
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @vite(['resources/css/app.css', 'resources/js/main.jsx'])
 </head>
 <body>
     <div id="root"></div>
