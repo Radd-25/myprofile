@@ -23,9 +23,29 @@ class ContactController extends Controller
         ]);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
-        DB::table('contacts')->where('id', $id)->delete();
-        return redirect('/admin')->with('success', 'Contact deleted successfully.');
+        $deleted = DB::table('contacts')->where('id', $id)->delete();
+
+        // If this is an AJAX / fetch request, return JSON so frontend can update the UI
+        if ($request->expectsJson() || $request->ajax()) {
+            if ($deleted) {
+                return response()->json([
+                    'message' => 'Contact deleted',
+                    'id' => (int) $id,
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'Contact not found',
+            ], 404);
+        }
+
+        // Fallback for normal form submissions
+        if ($deleted) {
+            return redirect('/admin')->with('success', 'Contact deleted successfully.');
+        }
+
+        return redirect('/admin')->with('error', 'Contact not found.');
     }
 }
