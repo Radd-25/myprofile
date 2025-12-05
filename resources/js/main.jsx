@@ -5,32 +5,45 @@ import Aurora from '@/components/Aurora';
 import SpotlightCard from '@/components/SpotlightCard';
 import axios from "./axios";
 
-
-
 function App() {
-
-const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios.post("https://myprofile.test/contact", formData)
-        .then((res) => {
-            console.log("Success:", res.data);
-        })
-        .catch((err) => {
-            console.log("Error:", err);
-        });
-};
-
-
-
+    const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         message: "",
     });
+
+    const [submitting, setSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        setSuccessMessage('');
+        setErrorMessage('');
+        setSubmitting(true);
+
+
+        axios.post('/contact', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json'
+            }
+        })
+        .then((res) => {
+            setSuccessMessage('Message sent successfully! Thank you.');
+            setFormData({ name: "", email: "", message: "" });
+        })
+        .catch((err) => {
+            console.error(err);
+            setErrorMessage('Failed to send message. Please try again.');
+        })
+        .finally(() => {
+            setSubmitting(false);
+        });
+    };
 
     const handleChange = (e) => {
         setFormData({
@@ -40,14 +53,14 @@ const handleSubmit = (e) => {
     };
 
     const handleSmoothScroll = (targetId) => {
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-        targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start' // Aligns the top of the element to the top of the viewport
-        });
-    }
-};
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
     return (
         <>
@@ -61,6 +74,7 @@ const handleSubmit = (e) => {
                     <Aurora />
                 </div>
             </div>
+
             <div className="absolute top-60 left-40 z-20 text-white">
                 <div className='flex space-x-8 items-start'>
                     <div>   
@@ -78,13 +92,12 @@ const handleSubmit = (e) => {
                     <img src="/images/me.png" className='-mt-40 ml-30 scale-90'/>
                 </div>
             </div>
+
             <section className="cards pt-[90px] pb-40" id='contact-section'> 
                 <div className="max-w-7xl mx-auto flex items-stretch gap-10"> 
                     
                     <div className="w-[450px] " id="contact-section"> 
                         <form onSubmit={handleSubmit} className="w-full h-full"> 
-                            
-
                             <SpotlightCard className="p-8 pt-[30px] rounded-3xl bg-[#170d27] border border-neutral-800 shadow-lg h-full flex flex-col" >
                                 
                                 <h2 className="text-white text-3xl font-semibold mb-8">Contact Me</h2>
@@ -98,9 +111,21 @@ const handleSubmit = (e) => {
                                     <div className="grow"></div> 
                                 </div>
                                 
-                                <button type="submit" className="w-full py-4 mt-6 rounded-xl bg-gray-300 text-gray-800 font-bold text-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200">
-                                    <p>Send</p>
+                                <button
+                                    type="submit"
+                                    className="w-full py-4 mt-6 rounded-xl bg-gray-300 text-gray-800 font-bold text-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200 disabled:opacity-60"
+                                    disabled={submitting}
+                                >
+                                    <p>{submitting ? 'Sending...' : 'Send'}</p>
                                 </button>
+
+                                {/* Feedback messages */}
+                                {successMessage && (
+                                    <p className="mt-3 text-green-400 text-sm">{successMessage}</p>
+                                )}
+                                {errorMessage && (
+                                    <p className="mt-3 text-red-400 text-sm">{errorMessage}</p>
+                                )}
                             </SpotlightCard>
                         </form>
                     </div>
@@ -108,6 +133,7 @@ const handleSubmit = (e) => {
                     <div className='w-[740px]'> 
                         <div className='grid grid-cols-2 gap-10'> 
                             
+
                             <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
                                 <div className='mt-7'>
                                     <img src="/images/folder.png" className="w-13 h-13 mb-5 mt-6"/>
@@ -144,6 +170,7 @@ const handleSubmit = (e) => {
                     </div>
                 </div>
             </section>
+
           <footer className='bg-[#020618] border-t border-neutral-800 text-neutral-400 py-6 rounded-t-3xl'>
               <div className='text-white flex justify-between items-start w-full px-30 py-5'>
                   <div className="text-left">
