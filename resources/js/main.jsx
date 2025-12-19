@@ -64,7 +64,7 @@ function App() {
 
     return (
         <>
-            <header className="fixed -top-27 -left-113 z-50 flex items-center space-x-6">
+            <header className="fixed -top-27 -left-113 z-50 flex items-center space-x-6 overflow-x-hidden">
                <img src="/images/logo-b9.png" alt="Logo" className="scale-11 "/>
                <img src="/images/menu.png" alt="Menu" className='ml-285 scale-90' />
             </header>
