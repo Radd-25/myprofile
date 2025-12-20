@@ -42,9 +42,9 @@ class ContactController extends Controller
 
         // Fallback for normal form submissions
         if ($deleted) {
-            return redirect('/admin')->with('success', 'Contact deleted successfully.');
+            return redirect('/dashboard')->with('success', 'Contact deleted successfully.');
         }
 
-        return redirect('/admin')->with('error', 'Contact not found.');
+        return redirect('/dashboard')->with('error', 'Contact not found.');
     }
 }

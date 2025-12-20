@@ -5,12 +5,11 @@ import Aurora from '@/components/Aurora';
 import axios from "./axios";
 
 function App() {
-    // Note: If using Sanctum, it's better to call /sanctum/csrf-cookie 
-    // rather than manual meta tag selection for better session handling.
+    // Standard CSRF token retrieval for Laravel
     const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const [formData, setFormData] = useState({
-        username: "", // Changed from 'name' to 'username'
+        username: "", 
         password: "",
     });
 
@@ -27,13 +26,14 @@ function App() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Reset states at the start of every attempt
         setSuccessMessage('');
         setErrorMessage('');
         setSubmitting(true);
 
         try {
-
-            // 2. Perform Login
+            // Only one request, properly wrapped in try/catch
             const res = await axios.post('/login', formData, {
                 headers: {
                     'X-CSRF-TOKEN': csrf,
@@ -41,31 +41,46 @@ function App() {
                 }
             });
 
-            setSuccessMessage('Login successful! Redirecting...');
-            // Redirect to dashboard after 1 second
-            setTimeout(() => {
-                window.location.href = '/admin';
-            }, 1000);
-
+            if (res.status === 200) {
+                setSuccessMessage('Login successful! Redirecting...');
+                
+                // Use a short delay so the user can see the success message
+                setTimeout(() => {
+                    // Using /dashboard (lowercase) to match your web.php route
+                    window.location.href = '/dashboard';
+                }, 800);
+            }
         } catch (err) {
-            console.error(err);
-            setErrorMessage(err.response?.data?.message || 'Invalid account or password.');
+            // This block handles the 401 (Unauthorized) error
+            console.error("Login Error:", err.response);
+
+            // Access the error message from Laravel's response
+            const msg = err.response?.data?.message || 'Invalid account or password.';
+            setErrorMessage(msg);
         } finally {
+            // This runs regardless of success or failure
+            // It resets the "Authenticating..." button text
             setSubmitting(false);
         }
-        
     };
 
     return (
         <div className="relative min-h-screen">
-            <div className="min-h-screen justify-center bg-slate-950 absolute inset-0 -z-10">
+            {/* Background Layer */}
+            <div className="min-h-screen justify-center bg-slate-950 absolute inset-0 -z-10 pointer-events-none">
                 <Aurora />
             </div>
+            
+        {/* Header tetap paling atas */}
+        <header className="fixed -top-27 -left-113 -z-5 flex items-center space-x-6">
+            <img src="/images/logo-b9.png" alt="Logo" className="scale-11"/>
+            <img src="/images/menu.png" alt="Menu" className='ml-285 scale-90'/>
+        </header>
 
             <section id='contact-section'> 
                 <div className="flex justify-center items-center min-h-screen px-4"> 
                     <div className="w-[450px]"> 
-                        <form onSubmit={handleSubmit} className="w-full h-full "> 
+                        <form onSubmit={handleSubmit} className="w-full h-full"> 
                             <div className="p-8 pt-[30px] rounded-3xl bg-[#170d273b] border border-neutral-800 shadow-lg h-full flex flex-col backdrop-blur-2xl">
                                 
                                 <h2 className="text-white text-3xl font-semibold mb-8">Login Page</h2>
@@ -73,7 +88,7 @@ function App() {
                                 <div className="flex flex-col grow space-y-6 justify-start"> 
                                     <input 
                                         type="text" 
-                                        name="username" // Matches formData key
+                                        name="username" 
                                         placeholder="Account ID" 
                                         value={formData.username} 
                                         onChange={handleChange} 
@@ -100,8 +115,17 @@ function App() {
                                     {submitting ? 'Authenticating...' : 'Login'}
                                 </button>
 
-                                {successMessage && <p className="mt-3 text-green-400 text-sm text-center">{successMessage}</p>}
-                                {errorMessage && <p className="mt-3 text-red-400 text-sm text-center">{errorMessage}</p>}
+                                {/* Alert Messages */}
+                                {successMessage && (
+                                    <p className="mt-4 p-2 bg-green-500/20 border border-green-500 rounded text-green-400 text-sm text-center">
+                                        {successMessage}
+                                    </p>
+                                )}
+                                {errorMessage && (
+                                    <p className="mt-4 p-2 bg-red-500/20 border border-red-500 rounded text-red-400 text-sm text-center">
+                                        {errorMessage}
+                                    </p>
+                                )}
                             </div>
                         </form>
                     </div>
@@ -111,4 +135,7 @@ function App() {
     );
 }
 
-ReactDOM.createRoot(document.getElementById('login-root')).render(<App />);
+const rootElement = document.getElementById('login-root');
+if (rootElement) {
+    ReactDOM.createRoot(rootElement).render(<App />);
+}

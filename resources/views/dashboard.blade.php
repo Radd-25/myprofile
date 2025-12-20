@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="/images/icon.ico"/>
    
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/admin.jsx'])
+    @vite(['resources/css/app.css', 'resources/js/dashboard.jsx'])
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -16,8 +16,7 @@
 
     <script>
         window.__INITIAL_CONTACTS__ = @json($contacts);
-        // Base delete URL (we will send DELETE to `${base}/${id}`)
-        // routes/web.php defines the delete route as `/delete/{id}`
+        window.__USER_NAME__ = @json($userName);
         window.__DELETE_URL_BASE__ = "{{ url('delete') }}";
     </script>
 </body>

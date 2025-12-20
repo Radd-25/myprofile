@@ -1,11 +1,35 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import Aurora from '@/components/Aurora';
+import axios from 'axios';
 
 function App({ initialContacts = [] }) {
 	const [contacts, setContacts] = useState(initialContacts || [])
 
 	const csrfToken = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+
+    const userName = window.__USER_NAME__ || 'User';
+
+    const handlelogout = async () => {
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            const res = await axios.post('/logout', {}, {
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (res.status === 200) {
+                window.location.href = '/login';
+            }
+        } catch (err) {
+            console.error('Logout error:', err.response?.status);
+            alert('Logout failed');
+        }
+    };
+    
 
 	const handleDelete = async (id) => {
 		if (!confirm('Are you sure you want to delete this contact?')) return
@@ -45,14 +69,22 @@ return (
         </div>
 
         {/* Header tetap paling atas */}
-        <header className="fixed -top-27 -left-113 z-50 flex items-center space-x-6">
+        <header className="fixed -top-27 -left-113 -z-5 flex items-center space-x-6">
             <img src="/images/logo-b9.png" alt="Logo" className="scale-11"/>
             <img src="/images/menu.png" alt="Menu" className='ml-285 scale-90'/>
         </header>
 
         {/* TABEL DI ATAS BACKGROUND */}
         <div className="relative z-20 pt-32 pl-20 pr-20 ">
-            <h1 className='text-white font-bold text-3xl'>Welcome Raddin!</h1>
+            <div className='flex justify-between items-center'>
+                <h1 className='text-white font-bold text-3xl'>Welcome {userName}!</h1>
+                <button 
+                    onClick={handlelogout}
+                    className=" bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                    Logout
+                </button>
+            </div>
             <p className='text-white text-[22px] pb-5'>here is your inbox :</p>
             <table className="min-w-full bg-white borde shadow rounded-lg">
                 <thead className="">
