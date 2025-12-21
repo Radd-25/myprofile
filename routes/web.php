@@ -34,3 +34,4 @@ Route::middleware('auth')->group(function () {
         return response()->json(['message' => 'Logged out']);
     });
 });
+

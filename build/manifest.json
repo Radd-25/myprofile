@@ -1,0 +1,51 @@
+{
+  "_Triangle-Dhpe70Hh.js": {
+    "file": "assets/Triangle-Dhpe70Hh.js",
+    "name": "Triangle"
+  },
+  "_index-CIk__nF0.js": {
+    "file": "assets/index-CIk__nF0.js",
+    "name": "index",
+    "imports": [
+      "_Triangle-Dhpe70Hh.js"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Cgf3UHt2.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/404.jsx": {
+    "file": "assets/404-Cfxud5pl.js",
+    "name": "404",
+    "src": "resources/js/404.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Triangle-Dhpe70Hh.js"
+    ]
+  },
+  "resources/js/dashboard.jsx": {
+    "file": "assets/dashboard-CChy14Hi.js",
+    "name": "dashboard",
+    "src": "resources/js/dashboard.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Triangle-Dhpe70Hh.js",
+      "_index-CIk__nF0.js"
+    ]
+  },
+  "resources/js/main.jsx": {
+    "file": "assets/main-DwkbBUIM.js",
+    "name": "main",
+    "src": "resources/js/main.jsx",
+    "isEntry": true,
+    "imports": [
+      "_Triangle-Dhpe70Hh.js",
+      "_index-CIk__nF0.js"
+    ]
+  }
+}

@@ -5,6 +5,14 @@ import Aurora from '@/components/Aurora';
 import SpotlightCard from '@/components/SpotlightCard';
 import axios from "./axios";
 
+window.axios = axios;
+
+// Konfigurasi WAJIB untuk akses lewat Cloudflare/Domain Berbeda
+window.axios.defaults.withCredentials = true;
+window.axios.defaults.withXSRFToken = true; 
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.baseURL = window.location.origin;
+
 function App() {
     const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
