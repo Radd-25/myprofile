@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Aurora from '@/components/Aurora';
 import SpotlightCard from '@/components/SpotlightCard';
+import ProfileCard from './components/profilecard';
+import bg1 from '@/assets/bg1.jpg'
+import bg2 from '@/assets/bg2.jpg'
+import bg3 from '@/assets/bg3.jpg'
+
 import axios from "./axios";
 
 window.axios = axios;
@@ -72,39 +77,104 @@ function App() {
 
     return (
         <>
-            <header className="fixed -top-27 -left-113 z-50 flex items-center space-x-6 overflow-x-hidden">
-               <img src="/images/logo-b9.png" alt="Logo" className="scale-11 "/>
-               <img src="/images/menu.png" alt="Menu" className='ml-285 scale-90' />
+            <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-10 py-6">
+                <a href="/"><img src="/images/logo-b9.png" alt="Logo" className="h-11 w-auto"/></a>
+                <a href="/dashboard"><img src="/images/menu.png" alt="Menu" className="h-8 w-auto cursor-pointer" /></a>
             </header>
 
-            <div className="min-h-screen justify-center bg-slate-950 relative">
-                <div className="scale-100 w-full h-screen">
+            {/* 2. HERO SECTION (Unified Background and Content) */}
+            <section className="relative h-screen w-full flex items-center overflow-hidden">
+                {/* Aurora is absolute and covers the whole parent section */}
+                <div className="absolute inset-0 z-0">
                     <Aurora />
                 </div>
-            </div>
 
-            <div className="absolute top-60 left-40 z-20 text-white">
-                <div className='flex space-x-8 items-start'>
-                    <div>   
-                        <h1 className='font-bold text-[48px]'>Hi!, I’m Raddin Pratama Rachmat</h1>
-                        <h1 className='font-bold text-[96px] -mt-2 tracking-wide'>WEB DESIGNER</h1>
-                        <p className='text-[20px]'>I have an interest in design. I studied Design Communication Visual (DKV) at SMKIT Insan Toda <br/> and then continued my studies at Djuanda University Ciawi Bogor, majoring in Computer Science.<br/> Combining my previous expertise in design, I dream of providing affordable and elegant web design services.</p>
-                        <div className='flex mt-20 gap-10'>
-                            <a href="https://www.figma.com/proto/GK6Fb8lqDM9FsFC387OpjY/Untitled?node-id=1-34&p=f&t=tyhlDwLdCYGMmTHF-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" className='transition duration-300 ease-in-out hover:-translate-y-2' target="_blank"><img src="/images/project.png" /></a>
+                {/* Content sits on top of Aurora */}
+                <div className="container mx-auto px-10 relative z-20">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+                        
+                        {/* Left Column: Text - flex-grow ensures it takes up space */}
+                        <div className="flex-2 text-white pr-10 translate-x-[-10px]n">
+                            <h2 className="font-bold text-[48px] leading-tight">
+                                Hi!, I’m Raddin Pratama Rachmat
+                            </h2>
+                            <h1 className="font-bold text-[clamp(60px,8vw,96px)] -mt-2 tracking-wide leading-none">
+                                WEB DESIGNER
+                            </h1>
+                            <p className="text-[20px] mt-6 max-w-none text-neutral-300 leading-relaxed">
+                                I have an interest in design. I studied Design Communication Visual (DKV) <br /> at SMKIT Insan Toda 
+                                and then continued my studies at Djuanda University Ciawi Bogor, <br /> majoring in Computer Science.
+                               I dream of providing affordable and elegant web design services.
+                            </p>
                             
-                            <a onClick={() => handleSmoothScroll('contact-section')} 
-                                className='transition duration-300 ease-in-out hover:-translate-y-2 cursor-pointer'>
-                                <img src="/images/contact.png"/></a>
+                            <div className="flex mt-12 gap-8">
+                                <button onClick={() => handleSmoothScroll('projects-section')} className="transition hover:-translate-y-2">
+                                    <img src="/images/project.png" className="h-14 w-auto" />
+                                </button>
+                                <button onClick={() => handleSmoothScroll('contact-section')} className="transition hover:-translate-y-2">
+                                    <img src="/images/contact.png" className="h-14 w-auto" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Right Column: Hero Image */}
+                        <div className="flex-1 flex justify-end">
+                            <img 
+                                src="/images/me.png" 
+                                className="w-full max-w-[500px] object-contain drop-shadow-2xl -mt-30" 
+                                alt="Raddin Pratama"
+                            />
                         </div>
                     </div>
-                    <img src="/images/me.png" className='-mt-40 ml-30 scale-90'/>
                 </div>
-            </div>
+            </section>
 
-            <section className="cards pt-[90px] pb-40" id='contact-section'> 
+    {/* Main Wrapper: Stack title and cards vertically */}
+    <div className="flex flex-col items-center py-20" id="projects-section"> 
+
+    {/* Section title - Now stays on top */}
+    <h1 className="text-white text-4xl font-bold mb-15 mr-15">
+        My Projects
+    </h1>
+
+    {/* Cards row - Wrapped for responsiveness */}
+    <div className="flex flex-wrap justify-center gap-20 px-10 pl-1 pb-70">
+        <ProfileCard
+            name="Telkomsel Website Reimagine"
+            subtitle="Prototype Design using Figma"
+            image={bg1}
+            accentColor="blue"
+            width="360px"
+            height="280px"
+            href='https://www.figma.com/proto/DSlDGWqXoGZCTWYYhyXeLa/telkom?node-id=0-1&fuid=1089808288110239676'
+        />
+
+        <ProfileCard
+            name="AI Content Checker Website"
+            subtitle="In Development using Html & Css Native"
+            image={bg2}
+            accentColor="blue"
+            width="360px"
+            height="280px"
+            href='https://www.figma.com/proto/i8uaOFnNsYe1dzUvDiyrCY/Ai-content-checker?node-id=2014-65&p=f&t=bJ8y0zy865ZjLL9R-1'
+        />
+
+        <ProfileCard
+            name="Portfolio Website Design"
+            subtitle="Developed using ReactJS & TailwindCSS"
+            image={bg3}
+            accentColor="blue"
+            width="360px"
+            height="280px"
+            href='https://www.figma.com/proto/GK6Fb8lqDM9FsFC387OpjY/Untitled?node-id=1-34&t=NMKpIdeYOGvQmTd9-1'
+        />
+    </div>
+    </div>
+
+            <section className="cards pb-40" id="contact-section"> 
                 <div className="max-w-7xl mx-auto flex items-stretch gap-10"> 
                     
-                    <div className="w-[450px] " id="contact-section"> 
+                    <div className="w-[450px]"> 
                         <form onSubmit={handleSubmit} className="w-full h-full"> 
                             <SpotlightCard className="p-8 pt-[30px] rounded-3xl bg-[#170d27] border border-neutral-800 shadow-lg h-full flex flex-col" >
                                 

@@ -76,10 +76,10 @@ return (
         </div>
 
         {/* Header tetap paling atas */}
-        <header className="fixed -top-27 -left-113 -z-5 flex items-center space-x-6">
-            <img src="/images/logo-b9.png" alt="Logo" className="scale-11"/>
-            <img src="/images/menu.png" alt="Menu" className='ml-285 scale-90'/>
-        </header>
+            <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-10 py-6">
+                <a href="/"><img src="/images/logo-b9.png" alt="Logo" className="h-11 w-auto"/></a>
+                <a href="/dashboard"><img src="/images/menu.png" alt="Menu" className="h-8 w-auto cursor-pointer" /></a>
+            </header>
 
         {/* TABEL DI ATAS BACKGROUND */}
         <div className="relative z-20 pt-32 pl-20 pr-20 ">
