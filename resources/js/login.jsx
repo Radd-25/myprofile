@@ -2,6 +2,7 @@ import './bootstrap';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Aurora from '@/components/Aurora';
+import Navbar from './components/navbar';
 import axios from "./axios";
 
 window.axios = axios;
@@ -81,8 +82,7 @@ function App() {
             
         {/* Header tetap paling atas */}
           <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-10 py-6">
-            <a href="/"><img src="/images/logo-b9.png" alt="Logo" className="h-11 w-auto"/></a>
-            <a href="/dashboard"><img src="/images/menu.png" alt="Menu" className="h-8 w-auto cursor-pointer" /></a>
+            <Navbar />
           </header>
 
             <section id='contact-section'> 

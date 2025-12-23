@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import Aurora from '@/components/Aurora';
+import Navbar from './components/navbar';
 import axios from 'axios';
 
 window.axios = axios;

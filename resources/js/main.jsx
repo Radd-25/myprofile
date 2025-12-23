@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom/client';
 import Aurora from '@/components/Aurora';
 import SpotlightCard from '@/components/SpotlightCard';
 import ProfileCard from './components/profilecard';
+import Skills from './components/skills';
+import Navbar from './components/navbar';
 import bg1 from '@/assets/bg1.jpg'
 import bg2 from '@/assets/bg2.jpg'
 import bg3 from '@/assets/bg3.jpg'
@@ -68,18 +70,33 @@ function App() {
     const handleSmoothScroll = (targetId) => {
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const offset = 150; // leave a 100px gap above the target
+            const targetY = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top: targetY,
+                behavior: 'smooth'
             });
         }
     };
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-10 py-6">
-                <a href="/"><img src="/images/logo-b9.png" alt="Logo" className="h-11 w-auto"/></a>
-                <a href="/dashboard"><img src="/images/menu.png" alt="Menu" className="h-8 w-auto cursor-pointer" /></a>
+            {/* MOBILE BLOCKER */}
+            <div className="min-h-screen flex items-center justify-center bg-black px-6 lg:hidden">
+            <div className="text-center max-w-sm">
+                <h1 className="text-white text-2xl font-bold mb-4">
+                Desktop Only
+                </h1>
+                <p className="text-white/70">
+                i cannot optimize this website properly for mobile, it runs like shit, and the design broke.
+                </p>
+            </div>
+            </div>
+            {/* DESKTOP WEBSITE */}
+            <div className="hidden lg:block">
+            <header>
+                <Navbar />
             </header>
 
             {/* 2. HERO SECTION (Unified Background and Content) */}
@@ -129,47 +146,65 @@ function App() {
                 </div>
             </section>
 
-    {/* Main Wrapper: Stack title and cards vertically */}
-    <div className="flex flex-col items-center py-20" id="projects-section"> 
 
-    {/* Section title - Now stays on top */}
-    <h1 className="text-white text-4xl font-bold mb-15 mr-15">
-        My Projects
-    </h1>
+            {/* 3. SKILLS SECTION */}
+            <Skills className="md:col-span-3" />
 
-    {/* Cards row - Wrapped for responsiveness */}
-    <div className="flex flex-wrap justify-center gap-20 px-10 pl-1 pb-70">
-        <ProfileCard
-            name="Telkomsel Website Reimagine"
-            subtitle="Prototype Design using Figma"
-            image={bg1}
-            accentColor="blue"
-            width="360px"
-            height="280px"
-            href='https://www.figma.com/proto/DSlDGWqXoGZCTWYYhyXeLa/telkom?node-id=0-1&fuid=1089808288110239676'
-        />
+            {/* Past Projects Section */}
+            <section className="w-full pt-13 pb-70" id="projects-section">
+            {/* Page width */}
+            <div className="max-w-7xl mx-auto">
 
-        <ProfileCard
-            name="AI Content Checker Website"
-            subtitle="In Development using Html & Css Native"
-            image={bg2}
-            accentColor="blue"
-            width="360px"
-            height="280px"
-            href='https://www.figma.com/proto/i8uaOFnNsYe1dzUvDiyrCY/Ai-content-checker?node-id=2014-65&p=f&t=bJ8y0zy865ZjLL9R-1'
-        />
+                {/* Shared alignment wrapper */}
+                <div className="px-6 md:px-5">
 
-        <ProfileCard
-            name="Portfolio Website Design"
-            subtitle="Developed using ReactJS & TailwindCSS"
-            image={bg3}
-            accentColor="blue"
-            width="360px"
-            height="280px"
-            href='https://www.figma.com/proto/GK6Fb8lqDM9FsFC387OpjY/Untitled?node-id=1-34&t=NMKpIdeYOGvQmTd9-1'
-        />
-    </div>
-    </div>
+                {/* Title & description – LEFT, aligned */}
+                <div className="mb-12 md:-ml-2">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                    Past Projects
+                    </h2>
+                    <p className="text-white/60 max-w-xl">
+                    Projects that I have worked on previously.
+                    </p>
+                </div>
+
+                {/* Cards – slightly left aligned to match heading */}
+                <div className="flex flex-wrap justify-start gap-18 md:-ml-4">
+                    <ProfileCard
+                    name="Telkomsel Website Reimagine"
+                    subtitle="Prototype Design using Figma"
+                    image={bg1}
+                    accentColor="blue"
+                    width="360px"
+                    height="280px"
+                    href="https://www.figma.com/proto/DSlDGWqXoGZCTWYYhyXeLa/telkom?node-id=0-1&fuid=1089808288110239676"
+                    />
+
+                    <ProfileCard
+                    name="AI Content Checker Website"
+                    subtitle="In Development using HTML & CSS Native"
+                    image={bg2}
+                    accentColor="blue"
+                    width="360px"
+                    height="280px"
+                    href="https://www.figma.com/proto/i8uaOFnNsYe1dzUvDiyrCY/Ai-content-checker?node-id=2014-65&p=f&t=bJ8y0zy865ZjLL9R-1"
+                    />
+
+                    <ProfileCard
+                    name="Portfolio Website Design"
+                    subtitle="Developed using ReactJS & TailwindCSS"
+                    image={bg3}
+                    accentColor="blue"
+                    width="360px"
+                    height="280px"
+                    href="https://www.figma.com/proto/GK6Fb8lqDM9FsFC387OpjY/Untitled?node-id=1-34&t=NMKpIdeYOGvQmTd9-1"
+                    />
+                </div>
+                </div>
+            </div>
+            </section>
+
+
 
             <section className="cards pb-40" id="contact-section"> 
                 <div className="max-w-7xl mx-auto flex items-stretch gap-10"> 
@@ -252,7 +287,7 @@ function App() {
           <footer className='bg-[#020618] border-t border-neutral-800 text-neutral-400 py-6 rounded-t-3xl'>
               <div className='text-white flex justify-between items-start w-full px-30 py-5'>
                   <div className="text-left">
-                      <p className='text-[16px]'>Made with love using</p>
+                      <p className='text-[16px]'>Made with <a href="/thanks">love</a> using</p>
                       <div className='flex space-x-6 mt-4 mb-4'>
                           <a href="https://laravel.com" target="_blank"><img src="/images/laravel-b.png" className='w-10'/></a>
                           <a href="https://react.dev/" target="_blank"><img src="/images/react.png" className='w-10'  /></a>
@@ -276,8 +311,8 @@ function App() {
                   </div>
               </div>
           </footer>
-        </>
-    );
-}
+   </div>
+  </>
+);}
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);

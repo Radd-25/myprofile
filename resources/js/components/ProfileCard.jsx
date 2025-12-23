@@ -21,7 +21,7 @@ export default function ProfileCard({
       style={{ width, height }}
       className={`group relative rounded-2xl p-px
         bg-linear-to-br ${accentMap[accentColor]} to-transparent
-        transition-all duration-300 hover:scale-[0.98]`}
+        transition-all duration-300 hover:scale-[1.03]`}
     >
       {/* Card Body */}
       <div className="relative w-full h-full rounded-2xl overflow-hidden">
@@ -42,8 +42,7 @@ export default function ProfileCard({
                         bg-linear-to-b from-white/25 to-transparent" />
                         
         {/* Bottom content */}
-        <div className="absolute bottom-3 left-4 transition-transform duration-300
-            group-hover:translate-x-1.5 group-hover:-translate-y-1.5">
+        <div className="absolute bottom-3 left-4">
           <h2 className="text-xl font-bold text-white pl-2">
             {name}
           </h2>

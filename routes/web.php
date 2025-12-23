@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('main');
 });
 
+Route::get('/thanks', function () {
+    return view('thanks');
+});
+
 Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
