@@ -9,8 +9,22 @@ import Navbar from './components/navbar';
 import bg1 from '@/assets/bg1.jpg'
 import bg2 from '@/assets/bg2.jpg'
 import bg3 from '@/assets/bg3.jpg'
+import { motion } from "framer-motion";
 
 import axios from "./axios";
+
+// Shared fade-in animation used across sections
+const fadeInUp = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
+};
+
+const fadeOnce = (amount = 0.25) => ({
+    variants: fadeInUp,
+    initial: 'hidden',
+    whileInView: 'visible',
+    viewport: { once: true, amount },
+});
 
 window.axios = axios;
 
@@ -21,7 +35,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.baseURL = window.location.origin;
 
 function App() {
-    const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
     const [formData, setFormData] = useState({
         name: "",
@@ -33,31 +47,28 @@ function App() {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         setSuccessMessage('');
         setErrorMessage('');
         setSubmitting(true);
 
-
-        axios.post('/contact', formData, {
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json'
-            }
-        })
-        .then((res) => {
+        try {
+            await axios.post('/contact', formData, {
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'Accept': 'application/json'
+                }
+            });
             setSuccessMessage('Message sent successfully! Thank you.');
             setFormData({ name: "", email: "", message: "" });
-        })
-        .catch((err) => {
+        } catch (err) {
             console.error(err);
             setErrorMessage('Failed to send message. Please try again.');
-        })
-        .finally(() => {
+        } finally {
             setSubmitting(false);
-        });
+        }
     };
 
     const handleChange = (e) => {
@@ -111,7 +122,10 @@ function App() {
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
                         
                         {/* Left Column: Text - flex-grow ensures it takes up space */}
-                        <div className="flex-2 text-white pr-10 translate-x-[-10px]n">
+                        <motion.div
+                            className="flex-2 text-white pr-10 translate-x-2.5"
+                            {...fadeOnce(0.35)}
+                        >
                             <h2 className="font-bold text-[48px] leading-tight">
                                 Hi!, I’m Raddin Pratama Rachmat
                             </h2>
@@ -132,23 +146,30 @@ function App() {
                                     <img src="/images/contact.png" className="h-14 w-auto" />
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Right Column: Hero Image */}
-                        <div className="flex-1 flex justify-end">
+                        <motion.div
+                            className="flex-1 flex justify-end"
+                            {...fadeOnce(0.25)}
+                        >
                             <img 
                                 src="/images/me.png" 
                                 className="w-full max-w-[500px] object-contain drop-shadow-2xl -mt-30" 
                                 alt="Raddin Pratama"
                             />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
 
 
             {/* 3. SKILLS SECTION */}
-            <Skills className="md:col-span-3" />
+            <motion.div
+                {...fadeOnce(0.25)}
+            >
+                <Skills className="md:col-span-3" />
+            </motion.div>
 
             {/* Past Projects Section */}
             <section className="w-full pt-13 pb-70" id="projects-section">
@@ -159,17 +180,23 @@ function App() {
                 <div className="px-6 md:px-5">
 
                 {/* Title & description – LEFT, aligned */}
-                <div className="mb-12 md:-ml-2">
+                <motion.div
+                    className="mb-12 md:-ml-2"
+                    {...fadeOnce(0.35)}
+                >
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
                     Past Projects
                     </h2>
                     <p className="text-white/60 max-w-xl">
                     Projects that I have worked on previously.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* Cards – slightly left aligned to match heading */}
-                <div className="flex flex-wrap justify-start gap-18 md:-ml-4">
+                <motion.div
+                    className="flex flex-wrap justify-start gap-18 md:-ml-4"
+                    {...fadeOnce(0.2)}
+                >
                     <ProfileCard
                     name="Telkomsel Website Reimagine"
                     subtitle="Prototype Design using Figma"
@@ -199,7 +226,7 @@ function App() {
                     height="280px"
                     href="https://www.figma.com/proto/GK6Fb8lqDM9FsFC387OpjY/Untitled?node-id=1-34&t=NMKpIdeYOGvQmTd9-1"
                     />
-                </div>
+                </motion.div>
                 </div>
             </div>
             </section>
@@ -211,35 +238,39 @@ function App() {
                     
                     <div className="w-[450px]"> 
                         <form onSubmit={handleSubmit} className="w-full h-full"> 
-                            <SpotlightCard className="p-8 pt-[30px] rounded-3xl bg-[#170d27] border border-neutral-800 shadow-lg h-full flex flex-col" >
-                                
-                                <h2 className="text-white text-3xl font-semibold mb-8">Contact Me</h2>
-                                
-                                <div className="flex flex-col grow space-y-6 justify-start"> 
-                                    <input type="text" id="name" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200" required />
-                                    <input type="email" id="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200" required />
+                            <motion.div
+                                {...fadeOnce(0.3)}
+                            >
+                                <SpotlightCard className="p-8 pt-[30px] rounded-3xl bg-[#170d27] border border-neutral-800 shadow-lg h-full flex flex-col" >
                                     
-                                    <textarea id="message" name="message" placeholder="Your Message" rows="8.5" value={formData.message} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200 resize-none" required></textarea>
+                                    <h2 className="text-white text-3xl font-semibold mb-8">Contact Me</h2>
                                     
-                                    <div className="grow"></div> 
-                                </div>
-                                
-                                <button
-                                    type="submit"
-                                    className="w-full py-4 mt-6 rounded-xl bg-gray-300 text-gray-800 font-bold text-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200 disabled:opacity-60"
-                                    disabled={submitting}
-                                >
-                                    <p>{submitting ? 'Sending...' : 'Send'}</p>
-                                </button>
+                                    <div className="flex flex-col grow space-y-6 justify-start"> 
+                                        <input type="text" id="name" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200" required />
+                                        <input type="email" id="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200" required />
+                                        
+                                        <textarea id="message" name="message" placeholder="Your Message" rows="8.5" value={formData.message} onChange={handleChange} className="w-full p-4 rounded-xl bg-[#2a1d3e] text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#6b46c1] border border-transparent transition-all duration-200 resize-none" required></textarea>
+                                        
+                                        <div className="grow"></div> 
+                                    </div>
+                                    
+                                    <button
+                                        type="submit"
+                                        className="w-full py-4 mt-6 rounded-xl bg-gray-300 text-gray-800 font-bold text-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200 disabled:opacity-60"
+                                        disabled={submitting}
+                                    >
+                                        <p>{submitting ? 'Sending...' : 'Send'}</p>
+                                    </button>
 
-                                {/* Feedback messages */}
-                                {successMessage && (
-                                    <p className="mt-3 text-green-400 text-sm">{successMessage}</p>
-                                )}
-                                {errorMessage && (
-                                    <p className="mt-3 text-red-400 text-sm">{errorMessage}</p>
-                                )}
-                            </SpotlightCard>
+                                    {/* Feedback messages */}
+                                    {successMessage && (
+                                        <p className="mt-3 text-green-400 text-sm">{successMessage}</p>
+                                    )}
+                                    {errorMessage && (
+                                        <p className="mt-3 text-red-400 text-sm">{errorMessage}</p>
+                                    )}
+                                </SpotlightCard>
+                            </motion.div>
                         </form>
                     </div>
                     
@@ -247,37 +278,53 @@ function App() {
                         <div className='grid grid-cols-2 gap-10'> 
                             
 
-                            <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
-                                <div className='mt-7'>
-                                    <img src="/images/folder.png" className="w-13 h-13 mb-5 mt-6"/>
-                                    <p className="text-[20px] font-bold">Structured design</p>
-                                    <p className='text-[15px] mt-3 text-[#7f7988]'>From wireframe to implementation, we guarantee transparency at every step of your project.</p>
-                                </div>
-                            </SpotlightCard>
+                            <motion.div
+                                {...fadeOnce(0.2)}
+                            >
+                                <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
+                                    <div className='mt-7'>
+                                        <img src="/images/folder.png" className="w-13 h-13 mb-5 mt-6"/>
+                                        <p className="text-[20px] font-bold">Structured design</p>
+                                        <p className='text-[15px] mt-3 text-[#7f7988]'>From wireframe to implementation, we guarantee transparency at every step of your project.</p>
+                                    </div>
+                                </SpotlightCard>
+                            </motion.div>
                             
-                            <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
-                                <div className='mt-7'>
-                                    <img src="/images/rocket.png" className="w-10 h-10 mb-7 mt-6"/>
-                                    <p className="text-[20px] font-bold">Latest and Responsive Technology</p>
-                                    <p className='text-[15px] mt-3 text-[#7f7988]'>Designed using the latest technology, making your website look more modern.</p>
-                                </div>
-                            </SpotlightCard>
+                            <motion.div
+                                {...fadeOnce(0.2)}
+                            >
+                                <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
+                                    <div className='mt-7'>
+                                        <img src="/images/rocket.png" className="w-10 h-10 mb-7 mt-6"/>
+                                        <p className="text-[20px] font-bold">Latest and Responsive Technology</p>
+                                        <p className='text-[15px] mt-3 text-[#7f7988]'>Designed using the latest technology, making your website look more modern.</p>
+                                    </div>
+                                </SpotlightCard>
+                            </motion.div>
                             
-                            <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
-                                <div className='mt-7'>
-                                    <img src="/images/sparkle.png" className="w-10 h-10 mb-7 mt-6"/>
-                                    <p className="text-[20px] font-bold">Elegant design, <br /> affordable price</p>
-                                    <p className='text-[15px] mt-3 text-[#7f7988]'>Create your dream website with modern design without a big budget.</p>
-                                </div>
-                            </SpotlightCard>
+                            <motion.div
+                                {...fadeOnce(0.2)}
+                            >
+                                <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
+                                    <div className='mt-7'>
+                                        <img src="/images/sparkle.png" className="w-10 h-10 mb-7 mt-6"/>
+                                        <p className="text-[20px] font-bold">Elegant design, <br /> affordable price</p>
+                                        <p className='text-[15px] mt-3 text-[#7f7988]'>Create your dream website with modern design without a big budget.</p>
+                                    </div>
+                                </SpotlightCard>
+                            </motion.div>
                             
-                            <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
-                                <div className='mt-7'>
-                                    <img src="/images/clock.png" className="w-10 h-10 mb-7 mt-6"/>
-                                    <p className="text-[20px] font-bold">24/7 <br/> Consultation and Support</p>
-                                    <p className='text-[15px] mt-3 text-[#7f7988]'>Consultation and support from the initial concept stage through to after the launch of your website.</p>
-                                </div>
-                            </SpotlightCard>
+                            <motion.div
+                                {...fadeOnce(0.2)}
+                            >
+                                <SpotlightCard className="w-[350px] h-[300px] text-white bg-[#170d27]" spotlightColor="rgba(0, 229, 255, 0.25)">
+                                    <div className='mt-7'>
+                                        <img src="/images/clock.png" className="w-10 h-10 mb-7 mt-6"/>
+                                        <p className="text-[20px] font-bold">24/7 <br/> Consultation and Support</p>
+                                        <p className='text-[15px] mt-3 text-[#7f7988]'>Consultation and support from the initial concept stage through to after the launch of your website.</p>
+                                    </div>
+                                </SpotlightCard>
+                            </motion.div>
 
                         </div>
                     </div>
