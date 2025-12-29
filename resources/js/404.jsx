@@ -9,14 +9,11 @@ return (
           <div className="scale-100 w-full h-screen pointer-events-none">
             <Blue />
             </div>
-            <div className='-top-15 left-0 scale-50 absolute'>
-             <img src="/images/imphnen.png" className='z-5'/>
-              <div className="text-white text-5xl z-10 text-center">
-               <p>ini halaman 404, antara gw salah setting atau lu typo.</p>
-               <p>balik ke main page teken <a href="/"><span className="underline">bagian ini.</span></a></p>
+              <div className="text-white text-5xl z-10 text-  center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+               <p>This is 404, <br/> Either I set it wrong or you made a typo.</p>
+               <p>back to main page using <a href="/"><span className="underline">this section.</span></a></p>
              </div>
             </div>
-        </div>
         
     )
 }
