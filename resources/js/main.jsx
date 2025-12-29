@@ -338,7 +338,7 @@ function App() {
                       <div className='flex space-x-6 mt-4 mb-4'>
                           <a href="https://laravel.com" target="_blank"><img src="/images/laravel-b.png" className='w-10'/></a>
                           <a href="https://react.dev/" target="_blank"><img src="/images/react.png" className='w-10'  /></a>
-                          <a href="https://tailwindcss.com" target="_blank"><img src="/images/tailwind.png" className='w-10' /></a>
+                          <a href="https://tailwindcss.com" target="_blank"><img src="/images/tailwind.png" className='w-10 mt-2    ' /></a>
                       </div>
                       <p>laravel, react, tailwind css</p>
                   </div>
