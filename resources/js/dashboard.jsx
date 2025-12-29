@@ -65,9 +65,6 @@ function App({ initialContacts = [] }) {
 		}
 	}
 
-	if (!contacts || contacts.length === 0) {
-		return <p className="text-center text-gray-500">No contacts found.</p>
-	}
 
 return (
 	<div className="relative -h">
@@ -105,28 +102,34 @@ return (
                     </tr>
                 </thead>
                 <tbody>
-                    {contacts.map((contact) => (
-                        <tr className="border-t" key={contact.id}>
-                            <td className="px-6 py-4">{contact.id}</td>
-                            <td className="px-6 py-4">{contact.name}</td>
-                            <td className="px-6 py-4">{contact.email}</td>
-                            <td className="px-6 py-4">{contact.message}</td>
-                            <td className="px-6 py-4">
-                                <button
-                                    onClick={() => alert('Not Yet Implemented')}
-                                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-5"
-                                >
-                                    Approve
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(contact.id)}
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                >
-                                    Delete
-                                </button>
-                            </td>
+                    {!contacts || contacts.length === 0 ? (
+                        <tr className="border-t">
+                            <td className="px-6 py-4 text-gray-500  " colSpan="5">no inbox</td>
                         </tr>
-                    ))}
+                    ) : (
+                        contacts.map((contact) => (
+                            <tr className="border-t" key={contact.id}>
+                                <td className="px-6 py-4">{contact.id}</td>
+                                <td className="px-6 py-4">{contact.name}</td>
+                                <td className="px-6 py-4">{contact.email}</td>
+                                <td className="px-6 py-4">{contact.message}</td>
+                                <td className="px-6 py-4">
+                                    <button
+                                        onClick={() => alert('Not Yet Implemented')}
+                                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-5"
+                                    >
+                                        Approve
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(contact.id)}
+                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </div>
